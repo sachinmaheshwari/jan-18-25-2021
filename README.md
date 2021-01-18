@@ -65,7 +65,7 @@ Session 04: Overview of Akka clusters
 •	Exercises
 
 
-<br/>
+
 
 Session 05: Akka HTTP and design patterns
 

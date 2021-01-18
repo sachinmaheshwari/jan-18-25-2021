@@ -26,8 +26,17 @@ public class Clock extends AbstractBehavior<String> {
 	public Receive<String> createReceive() {
 		return newReceiveBuilder()
 				.onMessageEquals("now", () -> {
-					System.out.println(Thread.currentThread().getName());
+					//System.out.println(Thread.currentThread().getName());
+					System.out.println("****Path is " + getContext().getSelf().path());
 					System.out.println("It's " + LocalDateTime.now());
+					return this;
+				})
+				.onMessageEquals("quit", () -> {
+					System.out.println("Alright! I'am quitting");
+					return Behaviors.stopped();
+				})
+				.onAnyMessage(msg -> {
+					System.out.println("I don't know what to do " + msg);
 					return this;
 				})
 				.build();

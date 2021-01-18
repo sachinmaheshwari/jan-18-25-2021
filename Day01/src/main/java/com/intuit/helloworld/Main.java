@@ -7,10 +7,19 @@ import akka.actor.typed.ActorSystem;
 public class Main {
 
 	public static void main(String[] args) {
+		ActorSystem<String> clockActor 
+			= ActorSystem.create(Clock.create(), "my-clock");
+		clockActor.tell("now");
+		clockActor.tell("hello");
+		clockActor.tell("hi");
+		clockActor.tell("quit");
+		
 		for (int i = 0; i < 5; i++) {
-			ActorSystem<String> clockActor 
-				= ActorSystem.create(Clock.create(), "my-clock");
-			clockActor.tell("now");
+//			ActorSystem<String> clockActor 
+//				= ActorSystem.create(Clock.create(), "my-clock");
+//			clockActor.tell("now");
+//			clockActor.tell("hello");
+//			clockActor.tell("hi");
 //			clockActor.tell("now");
 //			clockActor.tell("now");
 //			clockActor.tell("now");			
