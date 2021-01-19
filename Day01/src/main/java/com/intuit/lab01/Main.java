@@ -16,7 +16,7 @@ public class Main {
 			String data = scanner.next();
 			if ("q".equalsIgnoreCase(data.trim())) {
 				keepGoing = false;
-				system.tell(() -> "quit" ); // Fire and forget interaction pattern
+				system.tell(() -> "quit"); // Fire and forget interaction pattern
 			} 
 			else if("history".equalsIgnoreCase(data.trim()) ) {
 				system.tell(new HistoryCommand());		
