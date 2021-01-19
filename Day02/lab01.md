@@ -25,17 +25,17 @@ public class StockServer {
 
 ```
 Price fetched for 1 stock symbol
-Price computed for 1 stock symbol
-Price computed for 2 stock symbols
-Price computed for 3 stock symbols
-Price computed for 4 stock symbols
-Price computed for 5 stock symbols
-Price computed for 5 stock symbols
-Price computed for 6 stock symbols
-Price computed for 7 stock symbols
-Price computed for 8 stock symbols
-Price computed for 9 stock symbols
-Price computed for 10 stock symbols
+Price fetched for 1 stock symbol
+Price fetched for 2 stock symbols
+Price fetched for 3 stock symbols
+Price fetched for 4 stock symbols
+Price fetched for 5 stock symbols
+Price fetched for 5 stock symbols
+Price fetched for 6 stock symbols
+Price fetched for 7 stock symbols
+Price fetched for 8 stock symbols
+Price fetched for 9 stock symbols
+Price fetched for 10 stock symbols
 Here's the price list
 
 INTUIT - 876.34
