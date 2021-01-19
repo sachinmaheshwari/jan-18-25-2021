@@ -27,8 +27,9 @@ public class StudentBehavior extends AbstractBehavior<StudentCommand> {
 	private Behavior<StudentCommand> onStartWritingTest(StudentCommand cmd) {
 		getContext().getLog().info("start test");
 		System.out.println(getContext().getSelf().path() + " started writing test**");
-		cmd.getTeacher().tell("finished");
-		return Behaviors.stopped();
+		//cmd.getTeacher().tell("finished");
+		//return Behaviors.stopped();
+		return this;
 	}
 	
 	private Behavior<StudentCommand> onStopWritingTest(StudentCommand cmd) {

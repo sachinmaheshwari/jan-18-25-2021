@@ -1,5 +1,7 @@
 package com.intuit;
 
+import java.util.List;
+
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.AbstractBehavior;
@@ -35,20 +37,41 @@ public class TeacherBehavior extends AbstractBehavior<String> {
 	
 	private Behavior<String> onStart() {
 		// I am gonna ask the student to start writing the test
-		studentActor = getContext().spawn(StudentBehavior.create(), "student1");
-		StudentStartCommand cmd = new StudentStartCommand();
-		cmd.setTeacher(getContext().getSelf());
 		
-		studentActor.tell(cmd);
+		for (int i = 1; i < 11; i++) {
+			ActorRef<StudentCommand> student = getContext().spawn(StudentBehavior.create(), "student-" + i);
+			StudentStartCommand cmd = new StudentStartCommand();
+			cmd.setTeacher(getContext().getSelf());
+			student.tell(cmd);
+		}
+		
+//		studentActor = getContext().spawn(StudentBehavior.create(), "student1");
+//		StudentStartCommand cmd = new StudentStartCommand();
+//		cmd.setTeacher(getContext().getSelf());
+//		
+//		studentActor.tell(cmd);
 		return this;
 	}
 	
 	private Behavior<String> onStop() {
 		// I am gonna ask the student to stop writing the test
-		StudentStopCommand cmd = new StudentStopCommand();
-		cmd.setTeacher(getContext().getSelf());
-
-		studentActor.tell(cmd);
+	
+		for (int i = 1; i < 11; i++) {
+			ActorRef actor = getContext().getChild("student-" + i).get();
+			StudentStopCommand cmd = new StudentStopCommand();
+			cmd.setTeacher(getContext().getSelf());
+			actor.tell(cmd);
+		}
+		
+//		.forEach(child -> {
+//			StudentStopCommand cmd = new StudentStopCommand();
+//			cmd.setTeacher(getContext().getSelf());
+//			child.tell(cmd);	
+//		});
+//		StudentStopCommand cmd = new StudentStopCommand();
+//		cmd.setTeacher(getContext().getSelf());
+//
+//		studentActor.tell(cmd);
 		return Behaviors.stopped();
 	}
 	
