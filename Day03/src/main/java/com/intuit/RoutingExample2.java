@@ -17,7 +17,7 @@ import akka.actor.typed.javadsl.Routers;
  * */
 public class RoutingExample2 {
 	public static void main(String[] args) {
-		PoolRouter<Object> poolRouter = Routers.pool(5, MyTranslator.create()).withConsistentHashingRouting(9, msg -> {
+		PoolRouter<Object> poolRouter = Routers.pool(5, MyTranslator.create()).withConsistentHashingRouting(50, msg -> {
 			int rnd = (int)Math.random() * 5;
 			return msg.toString() + "_" + rnd;
 		});
@@ -29,7 +29,7 @@ public class RoutingExample2 {
 			} else if (i % 2 !=0 && i < 6){
 				system.tell("namaste");
 			} else {
-				system.tell("namaskara");
+				system.tell("vanakkam");
 			}
 				
 		}
@@ -57,8 +57,8 @@ class MyTranslator extends AbstractBehavior<Object> {
 					System.out.println("-----namaste processed by " + getContext().getSelf().path());
 					return this;
 				})
-				.onMessageEquals("namaskara", () -> {
-					System.out.println("======namaskara processed by " + getContext().getSelf().path());
+				.onMessageEquals("vanakkam", () -> {
+					System.out.println("======vanakkam processed by " + getContext().getSelf().path());
 					return this;
 				})
 				.build();
