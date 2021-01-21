@@ -10,7 +10,7 @@ import akka.actor.testkit.typed.javadsl.TestInbox;
 
 class UnitTestingExampleParentActorTest {
 
-	@Test
+	//@Test
 	void testParentHiMessage() {
 		BehaviorTestKit<String> testKit 
 			= BehaviorTestKit.create(Parent.create());
@@ -21,7 +21,7 @@ class UnitTestingExampleParentActorTest {
 				"Received hi");
 	}
 	
-	@Test
+	//@Test
 	void testParentByeMessage() {
 		BehaviorTestKit<String> testKit 
 			= BehaviorTestKit.create(Parent.create());
@@ -30,7 +30,7 @@ class UnitTestingExampleParentActorTest {
 		assertEquals(testKit.getAllLogEntries().get(0).level(), Level.WARN);
 	}
 	
-	@Test
+	//@Test
 	void testChildMessage() {
 		BehaviorTestKit<Command> testKit 
 			= BehaviorTestKit.create(Child.create());
@@ -42,6 +42,22 @@ class UnitTestingExampleParentActorTest {
 		
 		assertTrue(inbox.hasMessages());
 		inbox.expectMessage("hi");
+	}
+	
+	@Test
+	void testParentChildMessage() {
+		BehaviorTestKit<Command> child 
+			= BehaviorTestKit.create(Child.create());
+		BehaviorTestKit<String> parent 	
+			= BehaviorTestKit.create(Parent.create());
+
+		Command cmd = new Command();
+		cmd.parent = parent.getRef();
+		
+		child.run(cmd);
+		System.out.println(parent.getAllEffects());
+		System.out.println(parent.getAllLogEntries());
+		assertTrue(parent.getAllLogEntries().size() == 1);
 	}
 	
 	

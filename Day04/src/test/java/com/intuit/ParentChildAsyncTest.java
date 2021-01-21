@@ -37,5 +37,17 @@ class ParentChildAsyncTest {
 		probe.expectMessage(Duration.ofSeconds(6), "hi");
 		
 	}
+	
+	@Test
+	void testParentChildHiMessage() {
+		ActorRef<Command> child = actorTestKit.spawn(Child.create());
+		ActorRef<String> parent = actorTestKit.spawn(Parent.create());
+		
+		Command cmd = new Command();
+		cmd.parent = parent;
+		child.tell(cmd);
+		
+		
+	}
 
 }
