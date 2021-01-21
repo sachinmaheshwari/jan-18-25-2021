@@ -1,6 +1,8 @@
 package com.intuit;
 
+import akka.actor.typed.ActorSystem;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.DispatcherSelector;
 import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
@@ -8,9 +10,9 @@ import akka.actor.typed.javadsl.Receive;
 
 public class BlockingExample {
 
-	public static void main(String[] args) {
-		
-
+	public static void main(String[] args) {	
+		ActorSystem<String> guardian = ActorSystem.create(GuardianBehavior.create(), "guardian");
+		guardian.tell("start");
 	}
 
 }
@@ -23,7 +25,16 @@ class GuardianBehavior extends AbstractBehavior<String> {
 
 	@Override
 	public Receive<String> createReceive() {
-		return null;
+		return newReceiveBuilder()
+				.onAnyMessage(msg -> {
+					for (int i = 1; i <= 100; i++) {
+						getContext().spawn(FastPrinter.create(), "fast-" + i).tell(i + "");
+						//getContext().spawn(SlowPrinter.create(), "slow-" + i, DispatcherSelector.blocking()).tell(i + "");
+						getContext().spawn(SlowPrinter.create(), "slow-" + i, DispatcherSelector.fromConfig("slow-printer-dispatcher")).tell(i + "");
+					}
+					return this;
+				})
+				.build();
 	}
 	
 	public static Behavior<String> create() {
