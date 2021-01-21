@@ -21,11 +21,11 @@ class Parent extends AbstractBehavior<String> {
 	public Receive<String> createReceive() {
 		return newReceiveBuilder()
 				.onMessageEquals("hi", () -> {
-					System.out.println("Received hi" );
+					getContext().getLog().debug("Received hi" );
 					return this;
 				})
 				.onMessageEquals("bye", () -> {
-					System.out.println("Received bye" );
+					getContext().getLog().warn("Received bye" );
 					return Behaviors.stopped();
 				})
 				.build();
@@ -44,7 +44,15 @@ class Child extends AbstractBehavior<Command> {
 
 	@Override
 	public Receive<Command> createReceive() {
-		return null;
+		return newReceiveBuilder()
+				.onAnyMessage(cmd -> {
+					cmd.parent.tell("hi");
+					return this;
+				})
+				.build();
+	}
+	public static Behavior<Command> create() {
+		return Behaviors.setup(Child::new);
 	}
 	
 }
