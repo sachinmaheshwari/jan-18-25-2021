@@ -46,6 +46,7 @@ class Child extends AbstractBehavior<Command> {
 	public Receive<Command> createReceive() {
 		return newReceiveBuilder()
 				.onAnyMessage(cmd -> {
+					Thread.sleep(5000);
 					cmd.parent.tell("hi");
 					return this;
 				})
