@@ -25,8 +25,10 @@ public class AskExample2 {
 
 class ParentBehavior extends AbstractBehavior<String> {
 
+	private ActorRef<ExampleCommand> child = null;
 	public ParentBehavior(ActorContext<String> context) {
 		super(context);
+		child = context.spawn(ChildBehavior.create(), "child");
 	}
 
 	@Override
@@ -34,7 +36,7 @@ class ParentBehavior extends AbstractBehavior<String> {
 		return newReceiveBuilder()
 				.onMessageEquals("fine", () -> {
 					System.out.println("***Received fine from child");
-					return this;
+					return Behaviors.stopped();
 				})
 				.onAnyMessage(msg -> {
 					// Normal request-reponse pattern; there is no guarantee that the child will respond.
@@ -43,13 +45,14 @@ class ParentBehavior extends AbstractBehavior<String> {
 //					cmd.ref = getContext().getSelf();
 //					child.tell(cmd);
 					
-					ActorRef<ExampleCommand> child = getContext().spawn(ChildBehavior.create(), "child");
+					
+					//getContext().ask(resClass, target, responseTimeout, createRequest, applyToResponse);
 					getContext().ask(String.class, 
 							child, 
-							Duration.ofSeconds(2), 
-							ref -> {
+							Duration.ofSeconds(1), 
+							fabricatedHiddenActorRef -> {
 								ExampleCommand cmd = new ExampleCommand();
-								cmd.ref = ref;
+								cmd.ref = fabricatedHiddenActorRef;
 								return cmd;
 							}, 
 							(response, throwable) -> {
@@ -57,12 +60,10 @@ class ParentBehavior extends AbstractBehavior<String> {
 									System.out.println("Received " + response);
 								}
 								else {
-									System.out.println("Child is not responding");
+									System.out.println("Child is not responding yet");
 								}
+								return response;
 							});
-					
-					
-					
 					
 					return this;
 				})
@@ -84,6 +85,7 @@ class ChildBehavior extends AbstractBehavior<ExampleCommand> {
 	public Receive<ExampleCommand> createReceive() {
 		return newReceiveBuilder()
 				.onAnyMessage(cmd -> {
+					Thread.sleep(5000);
 					cmd.ref.tell("fine");
 					return this;
 				})
