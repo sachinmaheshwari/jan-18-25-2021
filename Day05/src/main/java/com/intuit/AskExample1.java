@@ -51,6 +51,7 @@ class TimeBehavior extends AbstractBehavior<Command> {
 		return newReceiveBuilder()
 				.onAnyMessage(cmd -> {
 					Thread.sleep(5000);
+					System.out.println(cmd.ref.path());
 					cmd.ref.tell("It's " + LocalDateTime.now());
 					return this;
 				})
