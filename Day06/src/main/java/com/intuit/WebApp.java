@@ -79,7 +79,8 @@ class WebRoutes {
 				return get(() -> onSuccess(compStage, performed -> {
 					return complete(performed);
 				}));
-			 })
+			 }),
+			path("greet", () -> get(() -> parameter("name", (name) -> complete("hi " + name))))
 		);
 	}
 }
